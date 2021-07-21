@@ -1,5 +1,5 @@
 import React from 'react';
-import {MainPage, CartPage, PageNotFound} from '../pages';
+import {MainPage, CartPage, ItemPage, PageNotFound} from '../pages';
 import AppHeader from '../app-header';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
@@ -20,6 +20,10 @@ const App = () => {
                         path='/cart'
                         exact
                         component={CartPage}
+                        />
+                    <Route
+                        path='/:id'
+                        component={ItemPage}
                         />
                     <Route
                         component={PageNotFound}
