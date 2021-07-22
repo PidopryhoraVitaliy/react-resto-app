@@ -31,10 +31,18 @@ const deleteFromCart = (id) => {
     }
 }
 
+const addedToOrder = (orderId) => {
+    return {
+        type: 'ITEMS_ADDED_TO_ORDER',
+        orderId
+    }
+}
+
 export {
     menuLoaded,
     menuRequested,
     menuError,
     addedToCart,
-    deleteFromCart
+    deleteFromCart,
+    addedToOrder
 };

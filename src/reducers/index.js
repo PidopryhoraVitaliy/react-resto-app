@@ -3,7 +3,8 @@ const initialState = {
     menu: [],
     loading: true,
     error: false,
-    items: []
+    items: [],
+    orderId: ''
 }
 
 const reducer = (state = initialState, action) => {
@@ -13,47 +14,59 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 menu: action.payload,
                 loading: false,
-                error: false
+                error: false,
             };
         case 'MENU_REQUESTED':
             return {
                 ...state,
                 menu: state.menu,
                 loading: true,
-                error: false
+                error: false,
             };
         case 'MENU_ERROR':
             return {
                 ...state,
                 menu: state.menu,
                 loading: false,
-                error: true
+                error: true,
             };
         case 'ITEM_ADD_TO_CART':
             const id = action.payload;
-            const item = state.menu.find(item => item.id === id);
-            const newItem = {
-                ...item
+            const menuItem = state.menu.find(item => item.id === id);
+            const itemsItem = state.items.find(item => item.id === id);
+            let newItems = [];
+            if (itemsItem === undefined) {
+                newItems = [
+                    ...state.items,
+                    {
+                        ...menuItem,
+                        quantity: 1,
+                        sum: menuItem.price
+                    }
+                ];
+            } else {
+                itemsItem.quantity++;
+                itemsItem.sum = itemsItem.quantity * itemsItem.price;
+                newItems = [...state.items];
             }
-            /*const newItem = {
-                id: item.id,
-                title: item.title,
-                price: item.price,
-                url: item.url,
-            }*/
             return {
                 ...state,
-                items: [
-                    ...state.items,
-                    newItem
-                ]
+                orderId: '',
+                items: newItems
             }
         case 'ITEM_REMOVE_FROM_CART':
             return {
                 ...state,
+                orderId: '',
                 items: [
                     ...state.items.filter(item => item.id !== action.payload)
                 ]
+            }
+        case 'ITEMS_ADDED_TO_ORDER':
+            return {
+                ...state,
+                items: [],
+                orderId: action.orderId
             }
 
         default:
